@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=yoga
+Comment=My project description
+Exec=/usr/bin/qmlscene $@ /usr/share/yoga/yoga.qml
+Icon=qmlscene
+Terminal=false
+Type=Application
+X-Ubuntu-Touch=true
