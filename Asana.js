@@ -9,8 +9,8 @@ var asana_url = _api_base.arg(_api_version); //%1
 var _api_key = "kauDlxj.okZhTJiVJ3IAshyXoKhSKVB7";
 var _expected_content_type = "application/json; charset=UTF-8";
 
-function _asana_get(module, callback){
-    var url = asana_url.arg(module); //%2
+function _asana_get(module, callback, debug){
+    var url = (debug === true) ? asana_url.arg(module) + "?opt_pretty": asana_url.arg(module); //%2
     var timeout = 30000;
 
     var doc = new XMLHttpRequest();
@@ -19,6 +19,9 @@ function _asana_get(module, callback){
         if (doc.readyState === XMLHttpRequest.DONE){
             if(doc.status == 200 && doc.getResponseHeader("content-type") === _expected_content_type){
                 callback( JSON.parse(doc.responseText) );
+                if(debug === true){
+                    console.log(doc.responseText);
+                }
             } else {
                 console.error("STATUS:" + doc.status + " \nHEADERS: " + doc.getAllResponseHeaders() + "\n BODY: " + doc.responseText);
             }
@@ -49,7 +52,7 @@ function workspaces(callback){
     _asana_get("workspaces", callback);
 }
 
-function get_projects(workspace_id) {
+function get_projects(workspace_id){
 
     _asana_get("workspaces/"+workspace_id+"/projects", function(data){
         console.log(data);
@@ -67,6 +70,10 @@ function get_tasks(project_id) {
     });
 }
 
+function tasks(project_id, callback) {
+    _asana_get("projects/"+project_id+"/tasks?opt_fields=assignee,completed,name,notes&opt_pretty", callback); //XXX debug
+}
+
 function get_stories(task_id) {
 
     _asana_get("tasks/"+task_id+"/stories", function(data){
@@ -74,6 +81,8 @@ function get_stories(task_id) {
     });
 }
 
-
+function stories(task_id, callback) {
+    _asana_get("tasks/"+task_id+"/stories", callback);
+}
 
 
